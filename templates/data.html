@@ -1,0 +1,10 @@
+{% extends('layout.html') %}
+
+{% block body %}
+    Data
+    <ul class="list-group">
+        {% for dt in data %}
+            <li class="list-group-item">{{dt.title}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
