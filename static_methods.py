@@ -1,3 +1,4 @@
+"""Static methods"""
 import subprocess
 import shlex
 
