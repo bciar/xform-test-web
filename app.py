@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, jsonify, request, redirect, send_file
-from static_methods import _run_background_process
+from static_methods import _run_background_process, _run_terminal_command
 from werkzeug.utils import secure_filename
+from flask import flash
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -16,10 +17,13 @@ def about():
 
 @app.route('/test')
 def test():
+    '''ret = _run_terminal_command('java -jar xform-test-0.3.0.jar temp_uploads\\MultipleTestCases.xml')
+    print('return value', ret)'''
     stdout, stderr = _run_background_process('java -jar xform-test-0.3.0.jar temp_uploads\\MultipleTestCases.xml')
-    print('stdout', stdout, '\n')
-    print('stderr', stderr, '\n')
-    return render_template('index.html')
+    error = stderr.decode("utf-8")
+    out = stdout.decode("utf-8")
+    # flash(out, "warning")
+    return render_template('index.html', **locals())
 
 @app.route('/upload', methods=['POST'])
 def upload():
