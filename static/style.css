@@ -14,7 +14,8 @@ body {
     border: 2px dashed #0087F7;
     border-radius: 5px;
     background: white;
-    width: 400px;
+    width: 600px;
+    margin: 0 auto;
     padding: 30px;
     margin-bottom: 20px;
 }
