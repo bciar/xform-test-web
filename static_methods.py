@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE, run
+from subprocess import PIPE, run
 import shlex
 import os
 
