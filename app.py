@@ -6,12 +6,16 @@ import platform
 import os
 from flask import Flask, render_template, jsonify, request
 # noinspection PyProtectedMember
-from static_methods import _run_background_process
+from static_methods import _run_background_process, _run_windows_process
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 path_char = '\\' if platform.system() == 'Windows' else '/'
+
+
+is_windows = platform.system() == 'Windows'
+path_char = '\\' if is_windows else '/'
 
 
 @app.route('/')
@@ -33,16 +37,15 @@ def xform_test(filename):
     print('return value', ret)"""
     command = 'java -jar xform-test-0.3.0.jar temp_uploads'+path_char+filename
     try:
-        stdout, stderr = _run_background_process(command)
-        error = stderr.decode("utf-8")
-        out = stdout.decode("utf-8")
+        stdout, stderr = _run_background_process(command) if not is_windows else _run_windows_process(command)
         # flash(out, "warning")
-        return render_template('index.html', **locals())
+        return render_template('index.html', error=stderr, out=stdout)
     except Exception as err:
         # TODO: @bciar: I'm getting an IDE error "unresolved attribute for
         # base class Exception" - Joe 2018/11/06
-        error = err.stderr.decode("utf-8")
-        return render_template('index.html', **locals())
+        error = err if not is_windows else err.stderr.decode("utf-8")
+        return render_template('index.html', error=err)
+
 
 
 @app.route('/upload', methods=['POST'])

@@ -15,14 +15,14 @@
     {% if out %}
         <div class="alert alert-success message-bar" style="position:relative">
             <span style="position:absolute;top:1px;right:10px;cursor:pointer;">x</span>
-            {{ out }}
+            <pre>{{ out }}</pre>
         </div>
     {% endif %}
 
     {% if error %}
         <div class="alert alert-danger message-bar" style="position:relative">
             <span style="position:absolute;top:1px;right:10px;cursor:pointer;">x</span>
-            {{ error }}
+            <pre>{{ error }}</pre>
         </div>
     {% endif %}
 {% endblock %}
