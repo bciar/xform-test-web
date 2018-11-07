@@ -1,2 +1,2 @@
-# xform-test-web
+# XFormTest-Web
 Web application for XForm Test.
