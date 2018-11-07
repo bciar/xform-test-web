@@ -8,7 +8,8 @@ production-connect-heroku staging-connect-heroku logs logs-staging production \
 staging production-push staging-push push-production push-staging \
 circleci-validate-config  gunicorn-local serve-local production-push-ci \
 stagingpush-ci logs-heroku logs-staging-heroku validations validate \
-connect-staging connect-prod connect connect-vim connect-vim-staging
+connect-staging connect-prod connect connect-vim connect-vim-staging \
+heroku-setup
 
 # DEVELOPMENT
 ## Linting
@@ -20,8 +21,8 @@ lint:
 	# If you want to run this command directly, use the following:
 	# python -m pylint --output-format=colorized --reports=n xform-test_web
 	# test; \
-	# python -m pycodestyle xform-test_web test; \
-	# python -m pydocstyle xform-test_web test
+	# python -m pycodestyle xform_test_web test; \
+	# python -m pydocstyle xform_test_web test
 linttest:
 	${LINT_TEST}; ${CODE_TEST}; ${DOC_TEST}
 lintall: lint linttest
@@ -65,14 +66,12 @@ testdoc:
 circleci-validate-config:
 	echo Make sure that Docker is running, or this command will fail.; \
 	circleci config validate
-validations: circleci-validate-config
-validate: validations
 
 # SERVERS & ENVIRONMENTS
 GUNICORN=gunicorn app:app
 ## Local
 serve-local-flask:
-	python xform-test_web/xform-test_web.py
+	python xform_test_web/xform_test_web.py
 serve-heroku-local:
 	heroku local
 serve-dev-network-accessible:
@@ -84,6 +83,17 @@ serve-dev-network-accessible:
 gunicorn-local: serve-dev-network-accessible
 
 ## Heroku
+### Setup
+heroku-setup-staging:
+	heroku buildpacks:add --index 1 heroku/java --app xform-test-staging; \
+	heroku buildpacks:add --index 2 heroku/python --app xform-test-staging
+heroku-setup-production:
+	heroku buildpacks:add --index 1 heroku/java --app xform-test; \
+	heroku buildpacks:add --index 2 heroku/python --app xform-test
+heroku-setup:
+	make heroku-setup-staging; \
+	make heroku-setup-production
+
 ### Pushing & Serving
 push-production-heroku:
 	git status; \
@@ -95,7 +105,7 @@ push-production-heroku:
 	git checkout -b production; \
 	git push -u trunk production --force; \
 	git checkout master; \
-	open https://dashboard.heroku.com/apps/xform-test-web/activity; \
+	open https://dashboard.heroku.com/apps/xform-test/activity; \
 	open https://circleci.com/gh/PMA-2020/workflows/xform-test-web
 push-staging-heroku:
 	git status; \
@@ -107,28 +117,37 @@ push-staging-heroku:
 	git checkout -b staging; \
 	git push -u trunk staging --force; \
 	git checkout develop; \
-	open https://dashboard.heroku.com/apps/xform-test-web-staging/activity; \
+	open https://dashboard.heroku.com/apps/xform-test-staging/activity; \
 	open https://circleci.com/gh/PMA-2020/workflows/xform-test-web
-production-push-heroku: push-production-heroku
-staging-push-heroku: push-staging-heroku
-production: push-production-heroku
-staging: push-staging-heroku
 serve-production:
 	${GUNICORN}
 serve-staging: serve-production
+
 ### SSH
 production-connect-heroku:
 	heroku run bash --app xform-test-web
 staging-connect-heroku:
 	heroku run bash --app xform-test-web-staging
+	production-connect: production-connect-heroku
+install-vim-on-server:
+	mkdir ~/vim; \
+	cd ~/vim; \
+	curl 'https://s3.amazonaws.com/bengoa/vim-static.tar.gz' | tar -xz; \
+	export VIMRUNTIME="$HOME/vim/runtime"; \
+	export PATH="$HOME/vim:$PATH"; \
+	cd -
+
 ### Logs
 logs-heroku:
 	heroku logs --app xform-test-web --tail
 logs-staging-heroku:
 	heroku logs --app xform-test-web-staging --tail
 
-## Defaults
-### Pushing & Serving
+## Aliases and defaults
+production-push-heroku: push-production-heroku
+staging-push-heroku: push-staging-heroku
+production: push-production-heroku
+staging: push-staging-heroku
 serve: serve-local-flask
 production-push-ci: production-push-heroku
 staging-push-ci: staging-push-heroku
@@ -139,19 +158,11 @@ push-staging: staging-push
 gunicorn: serve-production
 serve-local: serve
 serve-dev: serve-local-flask
-### SSH
-production-connect: production-connect-heroku
 staging-connect: staging-connect-heroku
 connect-staging: staging-connect-heroku
 connect-prod: production-connect-heroku
 connect: production-connect-heroku
-install-vim-on-server:
-	mkdir ~/vim; \
-	cd ~/vim; \
-	curl 'https://s3.amazonaws.com/bengoa/vim-static.tar.gz' | tar -xz; \
-	export VIMRUNTIME="$HOME/vim/runtime"; \
-	export PATH="$HOME/vim:$PATH"; \
-	cd -
-### Logs
 logs: logs-heroku
 logs-staging: logs-staging-heroku
+validations: circleci-validate-config
+validate: validations
