@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE, run
+from subprocess import PIPE, run, Popen
 import shlex
 import os
 
@@ -11,15 +11,22 @@ def _run_background_process(command_line):
     """
 
     args = shlex.split(command_line, posix=False)
-    process = run(args, stdout=PIPE, stderr=PIPE, shell=True, check=True)
-    #CompletedProcess()
-    # process = subprocess.Popen(['java', '-version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    #process.wait()
+    '''process = run(args, stdout=PIPE, stderr=PIPE, shell=True, check=True)
     stdout = process.stdout
-    stderr = process.stderr
+    stderr = process.stderr'''
+
+    process = Popen(args, stdout=PIPE, stderr=PIPE)
+    process.wait()
+    stdout = process.stdout.read().decode().strip()
+    stderr = process.stderr.read().decode().strip()
 
     return stdout, stderr
 
-def _run_terminal_command(command_line):
-    ret = os.system(command_line)
-    return ret
+def _run_windows_process(command_line):
+    args = shlex.split(command_line, posix=False)
+    process = run(args, stdout=PIPE, stderr=PIPE, shell=True, check=True)
+    stdout = process.stdout.decode("utf-8")
+    stderr = process.stderr.decode("utf-8")
+
+    return stdout, stderr
+
