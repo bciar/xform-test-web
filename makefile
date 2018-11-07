@@ -21,8 +21,8 @@ lint:
 	# If you want to run this command directly, use the following:
 	# python -m pylint --output-format=colorized --reports=n xform-test_web
 	# test; \
-	# python -m pycodestyle xform-test_web test; \
-	# python -m pydocstyle xform-test_web test
+	# python -m pycodestyle xform_test_web test; \
+	# python -m pydocstyle xform_test_web test
 linttest:
 	${LINT_TEST}; ${CODE_TEST}; ${DOC_TEST}
 lintall: lint linttest
@@ -71,7 +71,7 @@ circleci-validate-config:
 GUNICORN=gunicorn app:app
 ## Local
 serve-local-flask:
-	python xform-test_web/xform-test_web.py
+	python xform_test_web/xform_test_web.py
 serve-heroku-local:
 	heroku local
 serve-dev-network-accessible:
@@ -85,10 +85,10 @@ gunicorn-local: serve-dev-network-accessible
 ## Heroku
 ### Setup
 heroku-setup-staging:
-	heroku buildpacks:add --index 1 heroku/java --app xform-test-staging; \
+	heroku buildpacks:add --index 1 heroku/jvm --app xform-test-staging; \
 	heroku buildpacks:add --index 2 heroku/python --app xform-test-staging
 heroku-setup-production:
-	heroku buildpacks:add --index 1 heroku/java --app xform-test; \
+	heroku buildpacks:add --index 1 heroku/jvm --app xform-test; \
 	heroku buildpacks:add --index 2 heroku/python --app xform-test
 heroku-setup:
 	make heroku-setup-staging; \
@@ -105,7 +105,7 @@ push-production-heroku:
 	git checkout -b production; \
 	git push -u trunk production --force; \
 	git checkout master; \
-	open https://dashboard.heroku.com/apps/xform-test-web/activity; \
+	open https://dashboard.heroku.com/apps/xform-test/activity; \
 	open https://circleci.com/gh/PMA-2020/workflows/xform-test-web
 push-staging-heroku:
 	git status; \
@@ -117,7 +117,7 @@ push-staging-heroku:
 	git checkout -b staging; \
 	git push -u trunk staging --force; \
 	git checkout develop; \
-	open https://dashboard.heroku.com/apps/xform-test-web-staging/activity; \
+	open https://dashboard.heroku.com/apps/xform-test-staging/activity; \
 	open https://circleci.com/gh/PMA-2020/workflows/xform-test-web
 serve-production:
 	${GUNICORN}
