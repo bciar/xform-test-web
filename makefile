@@ -71,7 +71,9 @@ circleci-validate-config:
 GUNICORN=gunicorn app:app
 ## Local
 serve-local-flask:
-	python xform_test_web/xform_test_web.py
+#	python xform_test_web/xform_test_web.py
+	open http://localhost:5000; \
+	python app.py
 serve-heroku-local:
 	heroku local
 serve-dev-network-accessible:

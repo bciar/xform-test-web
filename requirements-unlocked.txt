@@ -3,6 +3,7 @@ Flask
 Flask-Cors
 Flask-Script
 gunicorn
+pyxform
 pycodestyle==2.4.0
 pydocstyle==2.1.1
 pylint==2.1.1
