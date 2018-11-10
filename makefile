@@ -127,9 +127,9 @@ serve-staging: serve-production
 
 ### SSH
 production-connect-heroku:
-	heroku run bash --app xform-test-web
+	heroku run bash --app xform-test
 staging-connect-heroku:
-	heroku run bash --app xform-test-web-staging
+	heroku run bash --app xform-test-staging
 	production-connect: production-connect-heroku
 install-vim-on-server:
 	mkdir ~/vim; \
@@ -141,9 +141,9 @@ install-vim-on-server:
 
 ### Logs
 logs-heroku:
-	heroku logs --app xform-test-web --tail
+	heroku logs --app xform-test --tail
 logs-staging-heroku:
-	heroku logs --app xform-test-web-staging --tail
+	heroku logs --app xform-test-staging --tail
 
 ## Aliases and defaults
 production-push-heroku: push-production-heroku
