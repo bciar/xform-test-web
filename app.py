@@ -68,8 +68,8 @@ def xform_test(filename):
         for file in glob('temp/*'):
             os.remove(file)
         if stderr:
+            stderr = stderr.replace(heroku_err_every_time, '')
             if LOGGING_ON:
-                stderr = stderr.replace(heroku_err_every_time, '')
                 print(stderr, file=sys.stderr)
                 print(stdout)
             # TODO: @Joe: Fix so CLI does not return this in err msg.
