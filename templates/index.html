@@ -14,13 +14,20 @@
         </div>
     </form>
 
-    {% if out %}
+    {% if success %}
         <div class="alert alert-success message-bar" style="position:relative">
           <span style="position:absolute;top:1px;right:10px;cursor:pointer;">x</span>
           <div style="text-align:left;">
-            <pre>SUCCESS!</pre>
-            <br/>
-            <pre>{{ out }}</pre>
+            <pre>{{ success }}</pre>
+          </div>
+        </div>
+    {% endif %}
+
+    {% if warnings %}
+        <div class="alert alert-warning message-bar" style="position:relative">
+          <span style="position:absolute;top:1px;right:10px;cursor:pointer;">x</span>
+          <div style="text-align:left;">
+            <pre>{{ warnings }}</pre>
           </div>
         </div>
     {% endif %}
