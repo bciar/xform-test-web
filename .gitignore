@@ -1,4 +1,5 @@
 /.idea
+/node_modules
 /temp
 /temp_uploads
 .DS_Store
