@@ -82,8 +82,6 @@ circleci-validate-config:
 # SERVERS & ENVIRONMENTS
 ## Local
 serve:
-#	python xform_test_web/xform_test_web.py
-	open http://localhost:3000; \
 	npm start
 
 ## Build
@@ -107,23 +105,20 @@ set-full-production-env:
 
 ## Deploy
 ### AWS S3
-
-#	make set-default-staging-env; \
-#	cp env.js build/env.js; \
-#open http://xform-test-staging.pma2020.org
-
 push-staging-s3:
+#	make set-default-staging-env
+#	cp env.js build/env.js
+#	open http://xform-test-staging.pma2020.org
 	make build; \
 	aws s3 sync build/ s3://xform-test-staging.pma2020.org \
 	  --region us-west-2 --profile work; \
 	open http://xform-test-staging.pma2020.org.s3-website-us-west-2.amazonaws.\
 	com/
 
-#	make set-full-production-env; \
-#	cp env.js build/env.js; \
-#open http://xform-test.pma2020.org
-
 push-production-s3:
+#	make set-full-production-env
+#	cp env.js build/env.js
+#	open http://xform-test.pma2020.org
 	make build; \
 	aws s3 sync build/ s3://xform-test.pma2020.org \
 	  --region us-west-2 --profile work; \

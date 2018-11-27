@@ -71,7 +71,7 @@ export default class App extends Component {
                 
                 const file = acceptedFiles[0];
                 // TODO: get from env
-                // request.post('http://localhost:5000/upload')
+                // request.post('http://localhost:8080/upload')
                 // request.post('http://xform-test-api.pma2020.org/upload')
                 // request.post('http://xform-test-api-staging.pma2020.org/upload')
                 // request.post('http://xform-test-api-staging.herokuapp.com/upload')
