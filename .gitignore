@@ -1,6 +1,11 @@
+/.idea
+/node_modules
+/temp
+/temp_uploads
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
 *$py.class
 
 # C extensions
