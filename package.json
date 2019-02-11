@@ -3,16 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "downloads-folder": "^1.0.1",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-dropzone": "^7.0.1",
     "react-scripts": "2.1.1",
+    "selenium-webdriver": "^4.0.0-alpha.1",
     "superagent": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:selenium": "node ./test/selenium.js",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
